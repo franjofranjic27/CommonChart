@@ -1,0 +1,15 @@
+# Helm build artifacts
+charts/                # vendored dependencies nach `helm dependency update`
+*.tgz                  # gepackte Charts (`helm package`)
+
+# IDE/Editor junk
+.idea/
+*.iml
+.vscode/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
