@@ -2,10 +2,19 @@
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ .Values.global.appName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.global.appName }}
+    app.kubernetes.io/instance: {{ .Values.global.appName }}
 spec:
+  {{- if .Values.pdb.minAvailable }}
   minAvailable: {{ .Values.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
+  {{- end }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: {{ .Values.global.appName }}
 {{- end }}

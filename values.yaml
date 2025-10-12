@@ -1,0 +1,36 @@
+global:
+  appName: your-app-name
+
+deployment:
+  enabled: true
+  replicaCount: 1
+  image:
+      repository: "your-docker-repo"  # Replace with your Docker repository
+      tag: "latest"                   # Replace with your image tag
+      pullPolicy: IfNotPresent
+  resources:
+      limits:
+      cpu: "500m"
+      memory: "512Mi"
+      requests:
+      cpu: "250m"
+      memory: "256Mi"
+  envFrom:
+      - configMapRef:
+          name: your-config-map  # Replace with your ConfigMap name
+      - secretRef:
+          name: your-secret      # Replace with your Secret name
+
+service:
+  enabled: true
+  port: 8080
+
+pdb:
+  enabled: true
+  minAvailable: 1
+
+hpa:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80

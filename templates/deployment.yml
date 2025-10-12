@@ -1,29 +1,30 @@
+{{ if .Values.deployment.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ .Values.global.appName }}
   labels:
-    app: {{ .Release.Name }}
+    app: {{ .Values.global.appName }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.deployment.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: {{ .Values.global.appName }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}
+        app: {{ .Values.global.appName }}
     spec:
       containers:
-        - name: {{ .Release.Name }}
-          image: "{{ .Values.image.repository }}/{{ .Release.Name }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: {{ .Values.global.appName }}
+          image: "{{ .Values.deployment.image.repository }}/{{ .Values.global.appName }}:{{ .Values.deployment.image.tag }}"
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.port }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
           envFrom:
-            {{- toYaml .Values.envFrom | nindent 12 }}
+            {{- toYaml .Values.deployment.envFrom | nindent 12 }}
           readinessProbe:
             httpGet:
               path: /api/actuator/health/readiness
@@ -36,3 +37,4 @@ spec:
               port: {{ .Values.service.port }}
             initialDelaySeconds: 30
             periodSeconds: 20
+{{ end }}

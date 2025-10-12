@@ -1,0 +1,39 @@
+name: Chart lint
+
+on:
+  push:
+    branches-ignore:
+      - main
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Helm Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.15.2   # oder gewünschte Version
+
+      - name: Run helm lint
+        run: helm lint .
+
+  dry-run:
+    name: Helm Dry-Run
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.15.2
+
+      - name: Helm template (dry-run)
+        run: helm install test-release . --dry-run --debug --namespace default
