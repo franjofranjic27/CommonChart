@@ -1,0 +1,7 @@
+apiVersion: v2
+name: generic-chart
+description: A generic Helm chart for deploying Services
+type: application
+version: 0.1.0
+appVersion: "1.0.0-SNAPSHOT"
+icon: "https://github.com/franjofranjic27/CommonChart/tree/main/helm/Helm.svg"
