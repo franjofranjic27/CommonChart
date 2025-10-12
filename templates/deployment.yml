@@ -20,11 +20,13 @@ spec:
           image: "{{ .Values.deployment.image.repository }}/{{ .Values.global.appName }}:{{ .Values.deployment.image.tag }}"
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.port }}
+            - containerPort: {{ .Values.deployment.port }}
           resources:
             {{- toYaml .Values.deployment.resources | nindent 12 }}
           envFrom:
             {{- toYaml .Values.deployment.envFrom | nindent 12 }}
+          env:
+              {{- toYaml .Values.deployment.env | nindent 12 }}
           readinessProbe:
             httpGet:
               path: /api/actuator/health/readiness

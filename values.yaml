@@ -8,13 +8,14 @@ deployment:
       repository: "your-docker-repo"  # Replace with your Docker repository
       tag: "latest"                   # Replace with your image tag
       pullPolicy: IfNotPresent
+  port: 8080
   resources:
       limits:
-      cpu: "500m"
-      memory: "512Mi"
+        cpu: "500m"
+        memory: "512Mi"
       requests:
-      cpu: "250m"
-      memory: "256Mi"
+        cpu: "250m"
+        memory: "256Mi"
   envFrom:
       - configMapRef:
           name: your-config-map  # Replace with your ConfigMap name
@@ -23,7 +24,10 @@ deployment:
 
 service:
   enabled: true
-  port: 8080
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
 
 pdb:
   enabled: true
