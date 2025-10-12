@@ -35,5 +35,5 @@ jobs:
         with:
           version: v3.15.2
 
-      - name: Helm template (dry-run)
-        run: helm install test-release . --dry-run --debug --namespace default
+      - name: Helm template (render only)
+        run: helm template test-release . --debug
