@@ -1,9 +1,6 @@
 name: chart release
 
 on:
-  push:
-    tags:
-      - "v*"   # läuft bei Tags wie v1.0.0
   workflow_dispatch:  # manuelles Starten möglich
 
 jobs:
@@ -30,4 +27,4 @@ jobs:
         run: |
           CHART_NAME=$(yq '.name' Chart.yaml)
           CHART_VERSION=$(yq '.version' Chart.yaml)
-          helm push ./packaged/${CHART_NAME}-${CHART_VERSION}.tgz oci://registry-1.docker.io/${{ secrets.DOCKER_USERNAME }}/helm-charts
+          helm push ./packaged/${CHART_NAME}-${CHART_VERSION}.tgz oci://registry-1.docker.io/${{ secrets.DOCKER_USERNAME }}
