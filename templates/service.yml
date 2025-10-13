@@ -8,12 +8,9 @@ metadata:
     app.kubernetes.io/name: {{ .Values.global.appName }}
     app.kubernetes.io/instance: {{ .Values.global.appName }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.service.type | default "ClusterIP" }}
   selector:
     app: {{ .Values.global.appName }}
-  {{- if .Values.service.clusterIP }}
-  clusterIP: {{ .Values.service.clusterIP }}
-  {{- end }}
   ports:
     {{- range .Values.service.ports }}
       - name: {{ .name }}

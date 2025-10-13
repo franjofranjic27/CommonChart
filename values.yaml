@@ -16,14 +16,38 @@ deployment:
       requests:
         cpu: "250m"
         memory: "256Mi"
-  envFrom:
-      - configMapRef:
-          name: your-config-map  # Replace with your ConfigMap name
-      - secretRef:
-          name: your-secret      # Replace with your Secret name
+  ports:
+    - name: http
+      containerPort: 8080
+      protocol: TCP
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: 8080
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+    successThreshold: 1
+  startupProbe:
+    httpGet:
+      path: /health
+      port: 8080
+    failureThreshold: 12
+    periodSeconds: 10
 
 service:
   enabled: true
+  type: ClusterIP
   ports:
     - name: http
       port: 8080
