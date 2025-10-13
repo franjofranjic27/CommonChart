@@ -24,25 +24,25 @@ spec:
       labels:
         app: {{ .Values.global.appName }}
     spec:
-      {{ if .Values.deployment.volumes }}
+      {{ with .Values.deployment.volumes }}
       volumes:
-        {{- toYaml .Values.deployment.volumes | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{ end }}
-      {{ if .Values.deployment.affinity }}
+      {{ with .Values.deployment.affinity }}
       affinity:
-        {{- toYaml .Values.deployment.affinity | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{ end }}
-      {{ if .Values.deployment.topologySpreadConstraints }}
+      {{ with .Values.deployment.topologySpreadConstraints }}
       topologySpreadConstraints:
-        {{- toYaml .Values.deployment.topologySpreadConstraints | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{ end }}
-      {{ if .Values.deployment.tolerations }}
+      {{ with .Values.deployment.tolerations }}
       tolerations:
-        {{- toYaml .Values.deployment.tolerations | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{ end }}
       {{ if .Values.deployment.nodeSelector }}
       nodeSelector:
-        {{- toYaml .Values.deployment.nodeSelector | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{ end }}
       containers:
         - name: {{ .Values.global.appName }}
