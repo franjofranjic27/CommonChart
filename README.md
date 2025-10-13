@@ -1,6 +1,6 @@
 # generic-chart
 
-![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0-SNAPSHOT](https://img.shields.io/badge/AppVersion-1.0.0--SNAPSHOT-informational?style=flat-square)
 
 A generic Helm chart for deploying Services
 
@@ -8,49 +8,31 @@ A generic Helm chart for deploying Services
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| deployment.enabled | bool | `true` |  |
-| deployment.image.pullPolicy | string | `"IfNotPresent"` |  |
-| deployment.image.repository | string | `"your-docker-repo"` |  |
-| deployment.image.tag | string | `"latest"` |  |
-| deployment.livenessProbe.failureThreshold | int | `3` |  |
-| deployment.livenessProbe.httpGet.path | string | `"/api/actuator/health"` |  |
-| deployment.livenessProbe.httpGet.port | int | `8080` |  |
-| deployment.livenessProbe.initialDelaySeconds | int | `10` |  |
-| deployment.livenessProbe.periodSeconds | int | `10` |  |
-| deployment.livenessProbe.successThreshold | int | `1` |  |
-| deployment.livenessProbe.timeoutSeconds | int | `5` |  |
-| deployment.ports[0].containerPort | int | `8080` |  |
-| deployment.ports[0].name | string | `"http"` |  |
-| deployment.ports[0].protocol | string | `"TCP"` |  |
-| deployment.readinessProbe.failureThreshold | int | `3` |  |
-| deployment.readinessProbe.httpGet.path | string | `"/api/actuator/health"` |  |
-| deployment.readinessProbe.httpGet.port | int | `8080` |  |
-| deployment.readinessProbe.initialDelaySeconds | int | `10` |  |
-| deployment.readinessProbe.periodSeconds | int | `10` |  |
-| deployment.readinessProbe.successThreshold | int | `1` |  |
-| deployment.readinessProbe.timeoutSeconds | int | `5` |  |
-| deployment.replicaCount | int | `1` |  |
-| deployment.resources.limits.cpu | string | `"500m"` |  |
-| deployment.resources.limits.memory | string | `"512Mi"` |  |
-| deployment.resources.requests.cpu | string | `"250m"` |  |
-| deployment.resources.requests.memory | string | `"256Mi"` |  |
-| deployment.startupProbe.failureThreshold | int | `12` |  |
-| deployment.startupProbe.httpGet.path | string | `"/api/actuator/health"` |  |
-| deployment.startupProbe.httpGet.port | int | `8080` |  |
-| deployment.startupProbe.periodSeconds | int | `10` |  |
-| deployment.strategy.maxSurge | string | `"25%"` |  |
-| deployment.strategy.maxUnavailable | string | `"25%"` |  |
-| deployment.strategy.type | string | `"RollingUpdate"` |  |
-| global.appName | string | `"your-app-name"` |  |
-| hpa.enabled | bool | `true` |  |
-| hpa.maxReplicas | int | `3` |  |
-| hpa.minReplicas | int | `1` |  |
-| hpa.targetCPUUtilizationPercentage | int | `80` |  |
-| ingress.enabled | bool | `false` |  |
-| pdb.enabled | bool | `true` |  |
-| pdb.minAvailable | int | `1` |  |
-| service.enabled | bool | `true` |  |
-| service.ports[0].name | string | `"http"` |  |
-| service.ports[0].port | int | `8080` |  |
-| service.ports[0].targetPort | int | `8080` |  |
-| service.type | string | `"ClusterIP"` |  |
+| deployment.enabled | bool | `true` | Enable or disable the Deployment |
+| deployment.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy (Always, IfNotPresent, Never) |
+| deployment.image.repository | string | `"your-docker-repo"` | Docker image repository |
+| deployment.image.tag | string | `"latest"` | Docker image tag |
+| deployment.livenessProbe | object | `{"failureThreshold":3,"httpGet":{"path":"/api/actuator/health","port":8080},"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5}` | Liveness probe checks if the container is still running |
+| deployment.ports | list | `[{"containerPort":8080,"name":"http","protocol":"TCP"}]` | Container ports to expose |
+| deployment.readinessProbe | object | `{"failureThreshold":3,"httpGet":{"path":"/api/actuator/health","port":8080},"initialDelaySeconds":10,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5}` | Readiness probe checks if the container is ready to receive traffic |
+| deployment.replicaCount | int | `1` | Number of pod replicas to run (if HPA is disabled) |
+| deployment.resources.limits | object | `{"cpu":"500m","memory":"512Mi"}` | Resource limits define the maximum amount of resources a container can use |
+| deployment.resources.requests | object | `{"cpu":"250m","memory":"256Mi"}` | Resource requests define the minimum guaranteed resources for a container |
+| deployment.startupProbe | object | `{"failureThreshold":12,"httpGet":{"path":"/api/actuator/health","port":8080},"periodSeconds":10}` | Startup probe checks if the container has successfully started |
+| deployment.strategy.maxSurge | string | `"25%"` | Maximum number of pods that can be created above the desired number during update |
+| deployment.strategy.maxUnavailable | string | `"25%"` | Maximum number of pods that can be unavailable during update |
+| deployment.strategy.type | string | `"RollingUpdate"` | Deployment strategy type (RollingUpdate or Recreate) |
+| global.appName | string | `"your-app-name"` | The name of the application, used for labels and resource naming |
+| hpa.enabled | bool | `true` | Enable or disable HorizontalPodAutoscaler |
+| hpa.maxReplicas | int | `3` | Maximum number of replicas |
+| hpa.minReplicas | int | `1` | Minimum number of replicas |
+| hpa.targetCPUUtilizationPercentage | int | `80` | Target CPU utilization percentage before scaling |
+| ingress.enabled | bool | `false` | Enable or disable Ingress resource |
+| pdb.enabled | bool | `true` | Enable or disable PodDisruptionBudget |
+| pdb.minAvailable | int | `1` | Minimum number of pods that must be available during voluntary disruptions |
+| service.enabled | bool | `true` | Enable or disable the Service |
+| service.ports | list | `[{"name":"http","port":8080,"targetPort":8080}]` | Ports exposed by the Service |
+| service.type | string | `"ClusterIP"` | Kubernetes service type (ClusterIP, NodePort, LoadBalancer) |
+
+----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)
