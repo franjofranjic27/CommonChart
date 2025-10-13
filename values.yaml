@@ -8,7 +8,10 @@ deployment:
       repository: "your-docker-repo"  # Replace with your Docker repository
       tag: "latest"                   # Replace with your image tag
       pullPolicy: IfNotPresent
-  port: 8080
+  strategy:
+    type: RollingUpdate
+    maxSurge: 25%
+    maxUnavailable: 25%
   resources:
       limits:
         cpu: "500m"
